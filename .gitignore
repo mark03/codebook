@@ -1,7 +1,5 @@
-codebook.aux
-codebook.log
-codebook.pdf
-codebook.toc
+codebook.*
+!codebook.tex
 a.out
 a.exe
 a.exe.stackdump

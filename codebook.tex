@@ -6,12 +6,9 @@
 \usepackage{hyperref}
 \usepackage[landscape,a4paper,twoside=false,top=15mm,bottom=10mm,left=10mm,right=10mm]{geometry}
 \usepackage{fancyhdr}
-% \pagestyle{myheadings}
 \pagestyle{fancy}
-% \setlength{\headheight}{10.6pt}
 \setlength{\headsep}{0mm}
 \setlength{\voffset}{8mm}
-% \markright{Moradonellani (Politecnico di Milano)}
 \fancyhead[EOL]{Moradonellani (Politecnico di Milano)}
 \fancyhead[EOR]{\thepage}
 \cfoot{}
@@ -219,12 +216,11 @@ is colored black.
 \subsection{Binary Indexed Tree (BIT) / Fenwick Tree} % Brian Bi
 \lstinputlisting[language=c++]{BIT.cpp}
 
-\subsection{BIT with range updates} % Brian Bi
-\lstinputlisting[language=c++]{BIT-range.cpp}
-\lstinputlisting[language=c++]{BIT.cpp}
-
 \subsection{BIT with range query/updates}
 \lstinputlisting[language=c++]{BIT-range-range.cpp}
+
+\subsection{BIT with range updates} % Brian Bi
+\lstinputlisting[language=c++]{BIT-range.cpp}
 
 \subsection{Segment Tree with Lazy Propagation} % Brian Bi
 \lstinputlisting[language=c++]{segtree.cpp}
@@ -276,13 +272,13 @@ $(X^{4n^2}+3X^{2n^2}+2X^{n^2}+2X^{2n^2+n})/8$.
 \subsection{Knuth--Morris--Pratt (KMP)} % Stanford
 \lstinputlisting[language=c++]{KMP.cpp}
 
+\pagebreak
+
 \subsection{2-SAT} % Brian Bi
 \lstinputlisting[language=c++]{2sat.cpp}
 
 \subsection{Convex hull trick} % Brian Bi
 \lstinputlisting[language=c++]{chtrick.cpp}
-
-\pagebreak
 
 \subsection{Shunting Yard (Pseudocode)} % Wesley May
 \begin{lstlisting}
@@ -311,6 +307,8 @@ for each token:
 
 \subsection{Binary search} % Brian Bi
 \lstinputlisting[language=c++]{bsearch.c}
+
+\pagebreak
 
 \subsection{Bignums (C++, slow)} % Brian Bi
 \lstinputlisting[language=c++]{bignum.cpp}
