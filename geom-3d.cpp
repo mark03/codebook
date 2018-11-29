@@ -97,8 +97,7 @@ double lineLineDistance(point a, point b, point c, point d) {
   }
 }
 
-// Distance between line segments ab and cd (translated from
-// Java)
+// Distance between line segments ab and cd
 double segmentSegmentDistance(point a, point b, point c,
                               point d) {
   point u = b - a, v = d - c, w = a - c;
@@ -154,7 +153,6 @@ double segmentSegmentDistance(point a, point b, point c,
   // finally do the division to get sc and tc
   sc = (abs(sN) < EPS ? 0.0 : sN / sD);
   tc = (abs(tN) < EPS ? 0.0 : tN / tD);
-
   // get the difference of the two closest points
   point dP = w + (sc * u) - (tc * v); // = S1(sc) - S2(tc)
   return sqrt(dot(dP, dP)); // return the closest distance

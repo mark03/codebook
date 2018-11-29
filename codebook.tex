@@ -3,13 +3,23 @@
 \setlength{\parindent}{0.0in}
 \usepackage{amsmath}
 \usepackage{multicol}
-\usepackage[landscape,a4paper,twoside=false,top=15mm,bottom=15mm,left=10mm,right=10mm]{geometry}
-\pagestyle{myheadings}
-\markright{Moradonellani (Politecnico di Milano)}
+\usepackage{hyperref}
+\usepackage[landscape,a4paper,twoside=false,top=15mm,bottom=10mm,left=10mm,right=10mm]{geometry}
+\usepackage{fancyhdr}
+% \pagestyle{myheadings}
+\pagestyle{fancy}
+% \setlength{\headheight}{10.6pt}
+\setlength{\headsep}{0mm}
+\setlength{\voffset}{8mm}
+% \markright{Moradonellani (Politecnico di Milano)}
+\fancyhead[EOL]{Moradonellani (Politecnico di Milano)}
+\fancyhead[EOR]{\thepage}
+\cfoot{}
 \usepackage{listings}
+\usepackage{titlesec}
 \usepackage{color}
 \lstset{
-	tabsize=4,
+	tabsize=2,
     basicstyle=\ttfamily\scriptsize,
     %upquote=true,
     aboveskip={1.5\baselineskip},
@@ -27,6 +37,8 @@
     commentstyle=\color[rgb]{0.133,0.545,0.133},
     stringstyle=\color[rgb]{0.627,0.126,0.941},
 }
+\titlespacing*{\section} {0pt}{0.5ex plus 1ex minus .2ex}{0.3ex plus .2ex}
+\titlespacing*{\subsection} {0pt}{0.25ex plus 1ex minus .2ex}{0.3ex plus .2ex}
 
 \begin{document}
 % Disable balancing of columns on last page, which is ugly
@@ -38,18 +50,23 @@
 % New codebook
 \section{Flow and matching}
 
-\subsection{Max flow (Dini\'c)} % Stanford
-\lstinputlisting[language=c++]{dinic.cpp}
+\subsection{Hungarian algorithm} % https://raw.githubusercontent.com/ADJA/algos/master/Graphs/HungarianMatching.cpp
+\lstinputlisting[language=c++]{hungarian.cpp}
+
+\subsection{Max bipartite matching} % Stanford
+\lstinputlisting[language=c++]{bipartite.cpp}
+
+\pagebreak
 
 \subsection{Min-cost max-flow (successive shortest paths)}
 % Frank Chu and Igor Naverniouk (modified by Brian Bi)
 \lstinputlisting[language=c++]{mcmf4.cpp}
 
+\subsection{Max flow (Dini\'c)} % Stanford
+\lstinputlisting[language=c++]{dinic.cpp}
+
 \subsection{Min-cost matching} % Stanford
 \lstinputlisting[language=c++]{bipartite-mincost.cpp}
-
-\subsection{Max bipartite matching} % Stanford
-\lstinputlisting[language=c++]{bipartite.cpp}
 
 \subsection{Global min cut (Stoer--Wagner)} % Stanford
 \lstinputlisting[language=c++]{mincut.cpp}
@@ -68,6 +85,8 @@ the left (including themselves)
 \item The vertex cover consists of all vertices on the right that are
 \textbf{in} $T$, and all vertices on the left that are \textbf{not in} $T$
 \end{enumerate}
+
+\pagebreak
 
 \subsection{General Unweighted Maximum Matching (Edmonds' algorithm)}
 % Ilya Grebnov (modified by Brian Bi)
@@ -91,15 +110,15 @@ incident upon it and add it to the edge set.
 % Stanford (translated, modified, and expanded by Wesley May and Brian Bi)
 \lstinputlisting[language=c++]{geom-3d.cpp}
 
+\subsection{Minimum Enclosing Disk (Welzl's Algorithm)} % Brian Bi
+\lstinputlisting[language=c++]{welzl.cpp}
+
 \subsection{Convex hull} % Brian Bi
 \lstinputlisting[language=c++]{monotone.cpp}
 
 % TODO: Add faster one
 \subsection{Slow Delaunay triangulation} % Stanford
 \lstinputlisting[language=c++]{delaunay.cpp}
-
-\subsection{Minimum Enclosing Disk (Welzl's Algorithm)} % Brian Bi
-\lstinputlisting[language=c++]{welzl.cpp}
 
 \subsection{Pick's Theorem (Text)} % Wesley May
 For a polygon with all vertices on lattice points, $A = i + b/2 - 1$, where $A$
@@ -109,15 +128,17 @@ there is no generalization to higher dimensions)
 
 \section{Math Algorithms}
 
+\subsection{Gaussian elimination for square matrices of full rank; finds
+inverses and determinants} % Stanford
+\lstinputlisting[language=c++]{gaussian.cpp}
+
+\pagebreak
+
 \subsection{Sieve of Eratosthenes} % Jimmy Mårdell (Yarin)
 \lstinputlisting[language=c++]{yarin.cpp}
 
 \subsection{Modular arithmetic and linear Diophantine solver} % Stanford
 \lstinputlisting[language=c++]{modular.cpp}
-
-\subsection{Gaussian elimination for square matrices of full rank; finds
-inverses and determinants} % Stanford
-\lstinputlisting[language=c++]{gaussian.cpp}
 
 \subsection{Reduced row echelon form (RREF), matrix rank} % Stanford
 \lstinputlisting[language=c++]{rref.cpp}
@@ -140,11 +161,13 @@ solution is unique iff the rank of the matrix equals the number of variables.
 \subsection{Fast Fourier transform (FFT)} % Stanford
 \lstinputlisting[language=c++]{fft.cpp}
 
-\subsection{Number Theoretic Transform (NTT)}
-\lstinputlisting[language=c++]{ntt.cpp}
-
 \subsection{Simplex algorithm} % Stanford
 \lstinputlisting[language=c++]{simplex.cpp}
+
+\pagebreak
+
+\subsection{Number Theoretic Transform (NTT)}
+\lstinputlisting[language=c++]{ntt.cpp}
 
 \subsection{Fast factorization (Pollard rho) and primality testing
 (Rabin--Miller)} % Qiyu Zhu
@@ -198,6 +221,10 @@ is colored black.
 
 \subsection{BIT with range updates} % Brian Bi
 \lstinputlisting[language=c++]{BIT-range.cpp}
+\lstinputlisting[language=c++]{BIT.cpp}
+
+\subsection{BIT with range query/updates}
+\lstinputlisting[language=c++]{BIT-range-range.cpp}
 
 \subsection{Segment Tree with Lazy Propagation} % Brian Bi
 \lstinputlisting[language=c++]{segtree.cpp}
@@ -252,6 +279,11 @@ $(X^{4n^2}+3X^{2n^2}+2X^{n^2}+2X^{2n^2+n})/8$.
 \subsection{2-SAT} % Brian Bi
 \lstinputlisting[language=c++]{2sat.cpp}
 
+\subsection{Convex hull trick} % Brian Bi
+\lstinputlisting[language=c++]{chtrick.cpp}
+
+\pagebreak
+
 \subsection{Shunting Yard (Pseudocode)} % Wesley May
 \begin{lstlisting}
 // Add '(' to start of expression, and ')' to end.
@@ -276,9 +308,6 @@ for each token:
     S.push(token)
 // Finally, evaluate O as a postfix expression.
 \end{lstlisting}
-
-\subsection{Convex hull trick} % Brian Bi
-\lstinputlisting[language=c++]{chtrick.cpp}
 
 \subsection{Binary search} % Brian Bi
 \lstinputlisting[language=c++]{bsearch.c}
