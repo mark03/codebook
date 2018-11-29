@@ -1,5 +1,7 @@
-// Adjacency matrix implementation of Stoer-Wagner min cut algorithm. Runs in O(V^3).
-// Note, this is NOT min s-t cut, which is solved by max flow. This finds a global cut in an *undirected* graph.
+// Adjacency matrix implementation of Stoer-Wagner min cut
+// algorithm. Runs in O(V^3). Note, this is NOT min s-t cut,
+// which is solved by max flow. This finds a global cut in
+// an *undirected* graph.
 
 typedef vector<int> VI;
 typedef vector<VI> VVI;
@@ -11,8 +13,8 @@ pair<int, VI> GetMinCut(VVI &weights) {
   int N = weights.size();
   VI used(N), cut, best_cut;
   int best_weight = -1;
-  
-  for (int phase = N-1; phase >= 0; phase--) {
+
+  for (int phase = N - 1; phase >= 0; phase--) {
     VI w = weights[0];
     VI added = used;
     int prev, last = 0;
@@ -20,12 +22,13 @@ pair<int, VI> GetMinCut(VVI &weights) {
       prev = last;
       last = -1;
       for (int j = 1; j < N; j++)
-        if (!added[j] && (last == -1 || w[j] > w[last])) last = j;
-      if (i == phase-1) {
+        if (!added[j] && (last == -1 || w[j] > w[last]))
+          last = j;
+      if (i == phase - 1) {
         for (int j = 0; j < N; j++)
-                weights[prev][j] += weights[last][j];
+          weights[prev][j] += weights[last][j];
         for (int j = 0; j < N; j++)
-                weights[j][prev] = weights[prev][j];
+          weights[j][prev] = weights[prev][j];
         used[last] = true;
         cut.push_back(last);
         if (best_weight == -1 || w[last] < best_weight) {

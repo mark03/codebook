@@ -1,4 +1,4 @@
-// Reduced row echelon form via Gauss-Jordan elimination 
+// Reduced row echelon form via Gauss-Jordan elimination
 // with partial pivoting.  This can be used for computing
 // the rank of a matrix.
 //
@@ -21,17 +21,22 @@ int rref(VVT &a) {
   int r = 0;
   for (int c = 0; c < m; c++) {
     int j = r;
-    for (int i = r+1; i < n; i++) 
-      if (fabs(a[i][c]) > fabs(a[j][c])) j = i;
-    if (fabs(a[j][c]) < EPSILON) continue;
+    for (int i = r + 1; i < n; i++)
+      if (fabs(a[i][c]) > fabs(a[j][c]))
+        j = i;
+    if (fabs(a[j][c]) < EPSILON)
+      continue;
     swap(a[j], a[r]);
-   
+
     T s = 1.0 / a[r][c];
-    for (int j = 0; j < m; j++) a[r][j] *= s;
-    for (int i = 0; i < n; i++) if (i != r) {
-      T t = a[i][c];
-      for (int j = 0; j < m; j++) a[i][j] -= t * a[r][j];
-    }
+    for (int j = 0; j < m; j++)
+      a[r][j] *= s;
+    for (int i = 0; i < n; i++)
+      if (i != r) {
+        T t = a[i][c];
+        for (int j = 0; j < m; j++)
+          a[i][j] -= t * a[r][j];
+      }
     r++;
   }
   return r;
