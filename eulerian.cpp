@@ -1,53 +1,56 @@
-// Eulerian path/circuit in an undirected graph. TODO: Does
-// this handle self-edges? NOTE(Brian): This looks like it
-// could theoretically degrade to quadratic time in, say, a
-// graph where we keep going back and forth between two
-// vertices; in this case a lot of time could be wasted
-// searching for an unused edge.
+// Eulerian path/circuit in an undirected graph.
+// TODO: Does this handle self-edges?
+// Reduced complexity to O(n)
+// Edges in adjl are destroyed once used
 struct EulerianPath {
+  struct edge {
+    int u, v;
+    bool active;
+  };
   int n;
-  vector<vector<int>> adj;
-  vector<pair<int, int>> edges;
-  vector<int> valid;
+  vector<vector<int>> adjl;
+  vector<edge> edges;
   vector<int> circuit;
 
-  EulerianPath(int n) : n(n), adj(n) {}
-
   // Call this to construct the graph.
-  // Edges are zero-based and undirected (only add each edge
-  // once!)
+  EulerianPath(int n) : n(n), adjl(n) {}
+
+  // Edges are zero-based and undirected (only add each edge once!)
   void add_edge(int x, int y) {
-    adj[x].push_back(edges.size());
-    adj[y].push_back(edges.size());
-    edges.push_back(make_pair(x, y));
-    valid.push_back(1);
+    adjl[x].push_back(edges.size());
+    adjl[y].push_back(edges.size());
+    edges.push_back({x, y, true});
   }
 
-  void find_path(int x) {
-    for (int i = 0; i < adj[x].size(); i++) {
-      int e = adj[x][i];
-      if (!valid[e])
-        continue;
-      int v = edges[e].first;
-      if (v == x)
-        v = edges[e].second;
-      valid[e] = 0;
-      find_path(v);
+  void find_path(int node){
+    for(int i = 0; i < adjl[node].size(); ++i) {
+      int e = adjl[node][i];
+      swap(adjl[node][i], adjl[node].back());
+      adjl[node].pop_back();
+      --i;
+      if(edges[e].active) {
+        edges[e].active = false;
+        int adj;
+        if(edges[e].u == node) adj = edges[e].v;
+        else adj = edges[e].u;
+        find_path(adj);
+      }
     }
-    circuit.push_back(x);
+    circuit.push_back(node);
   }
-
+  
+  // IMPORTANT: This assumes eulerian path/circuit exists
+  // Preemptively count the number of odd degree nodes to
+  // determine if a solution exists (0 -> circuit, 2 -> path)
   // Call this to find the path/circuit (autodetects)
   // Returns the path/circuit itself in "circuit" variable
   // Initial node is repeated at end if it's a circuit.
-  void find_euler_path() {
-    circuit.clear();
-    // supposes graph is connected and has correct degree
-    for (int i = 0; i < n; i++)
-      if (adj[i].size() % 2) {
-        find_path(i);
-        return;
-      }
-    find_path(0);
+  void eul_path(){
+    int start = -1;
+    for(int i = 0; i < n; ++i)
+      if(adjl[i].size() & 1)
+        start = i;
+    if(start == -1) start = 0;
+    find_path(start);
   }
 };
