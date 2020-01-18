@@ -180,8 +180,11 @@ solution is unique iff the rank of the matrix equals the number of variables.
 \subsection{Bridges} % Andre Hahn Pereira
 \lstinputlisting[language=c++]{bridges.cpp}
 
-\subsection{Eulerian path} % Andre Hahn Pereira
+\subsection{Eulerian path}
 \lstinputlisting[language=c++]{eulerian.cpp}
+
+\subsection{Eulerian Tour}
+\lstinputlisting[language=c++]{eulerian-tour.cpp}
 
 \subsection{Lowest Common Ancestor (Pseudocode)} % Jacob Plachta
 Tarjan's offline algorithm (requires $O(N)$ disjoint set operations).
@@ -206,6 +209,27 @@ common ancestor of the pair {u,v} is available as Find(v).ancestor immediately
 (and only immediately) after u is colored black, provided v is already black.
 Otherwise, it will be available later as Find(u).ancestor, immediately after v
 is colored black.
+
+\subsection{Bron-Kerbosch (Pseudocode)}
+Reports maximal cliques in an undirected graph in O($3^{\frac{N}{3}}$).
+To call the algorithm set R = X = $\emptyset$, P = vertex set of the graph.
+N(v) is the sets of neighbor vertices to v.
+\begin{lstlisting}[mathescape=true]
+algorithm BronKerbosch(R, P, X) is
+  if P and X are both empty then
+    report R as a maximal clique
+  choose a pivot vertex u in P $\cup$ X
+  for each vertex v in P \ N(u) do
+    BronKerbosch(R $\cup$ {v}, P $\cap$ N(v), X $\cap$ N(v))
+    P := P \ {v}
+    X := X $\cup$ {v}
+\end{lstlisting}
+
+\subsection{Bellman-Ford}
+\lstinputlisting[language=c++]{bellman-ford.cpp}
+
+\subsection{Floyd-Washall (All Pair Shortest Path)}
+\lstinputlisting[language=c++]{floyd-warshall.cpp}
 
 \section{Data Structures}
 
@@ -266,13 +290,21 @@ itself) and $2n^2-n$ groups of 2 (all remaining cells), thus yielding
 $X^{2n^2-n+2n}=X^{2n^2+n}$ unaffected colorings.  So, the answer is
 $(X^{4n^2}+3X^{2n^2}+2X^{n^2}+2X^{2n^2+n})/8$.
 
-\section{Miscellaneous}
+\section{Strings}
 
-\subsection{Knuth--Morris--Pratt (KMP)} % Stanford
+\subsection{Knuth--Morris--Pratt (KMP)}
 \lstinputlisting[language=c++]{KMP.cpp}
 
 \subsection{Z-Algorithm}
 \lstinputlisting[language=c++]{Z-algorithm.cpp}
+
+\subsection{Longest palindromic substring} % Brian Bi
+\lstinputlisting[language=c++]{manacher.cpp}
+
+\subsection{Aho-Corasick}
+\lstinputlisting[language=c++]{aho-corasick.cpp}
+
+\section{Miscellaneous}
 
 \subsection{2-SAT} % Brian Bi
 \lstinputlisting[language=c++]{2sat.cpp}
@@ -314,20 +346,8 @@ for each token:
 \subsection{All nearest smaller values} % Brian Bi
 \lstinputlisting[language=c++]{ansv.cpp}
 
-\subsection{Longest palindromic substring} % Brian Bi
-\lstinputlisting[language=c++]{manacher.cpp}
-
 \subsection{Union-Find}
 \lstinputlisting[language=c++]{union-find.cpp}
-
-\subsection{Bellman-Ford}
-\lstinputlisting[language=c++]{bellman-ford.cpp}
-
-\subsection{Floyd-Washall (All Pair Shortest Path)}
-\lstinputlisting[language=c++]{floyd-warshall.cpp}
-
-\subsection{Eulerian Tour}
-\lstinputlisting[language=c++]{eulerian-tour.cpp}
 
 \subsection{NTT constants generator}
 \lstinputlisting[language=c++]{ntt-gen.cpp}
