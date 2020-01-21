@@ -352,6 +352,39 @@ for each token:
 \subsection{NTT constants generator}
 \lstinputlisting[language=c++]{ntt-gen.cpp}
 
+\subsection{DP optimizations (Text)}
+\begin{itemize}
+\item $DP[i] = \displaystyle \sum_{j = 1}^{k} a_{j}DP[i - j]$ i.e. it is a linear recurrence. \\
+ Matrix Exponentiation: complexity is $O(k^3logn)$.
+\item $DP[i] = \displaystyle \min_{j < i} (DP[j] + cost(j)x(i))$ \\
+ Convex Hull Trick: for each computed $j$ keep a line in the convex hull $y = mx + q$
+ where $m = cost(j)$ and $q = DP[j]$ and get answer querying with $x = x(i)$. \\
+ \textit{Further optimization if $cost(j)$ is increasing and $x(i)$ is decreasing}: \\
+ Lines are always added to the left of the hull ($m = cost(j)$ is increasing)
+ and query point $x(i)$ is moving to the left, so Convex Hull Trick can be
+ implemented with a deque to obtain amortized constant time queries and updates.
+\item $DP[i][k] = \displaystyle \min_{j < i} (DP[j][k - 1] + cost(i, j))$ \\
+ \textbf{Necessary condition}: $f(i) = optj(i, k)$ must be increasing ($optj(i, k)$ is optimal $j$ that minimizes
+ $DP[j][k - 1] + cost(i, j)$). \\
+ Divide and Conquer:
+ \begin{lstlisting}
+  function solve(k, l, r, optl, optr):
+    if(l > r)
+      base case: return
+    m := (l + r) / 2
+    j := optj(m, k) // test all j between optl and optr
+    solve(k, l, m - 1, optl, j)
+    solve(k, m + 1, r, j, optr)
+ \end{lstlisting}
+ k-th layer is computed in $O(nlogn)$.
+\item $DP[i][k] = \displaystyle \min_{i < j < k} (DP[i][j] + DP[j][k] + cost(i, k))$ \\
+ \textbf{Necessary condition}: $optj(i, k - 1) \leq optj(i, k) \leq optj(i + 1, k)$ ($optj(i, k)$ is optimal $j$ that minimizes
+ $DP[i][j] + DP[j][k] + cost(i, k)$). \\
+ Fill DP in order of increasing $k - i$: search for $optj(i, k)$ only between $optj(i, k - 1)$ and $optj(i + 1, k)$.
+ Complexity is reduced from $O(n^3)$ to $O(n^2)$.
+\end{itemize}
+Note: cost functions defined as $cost(i, j) = \displaystyle \sum_{k = i}^{j} a_{k}$ should satisfy $optj$ constraints for the last two cases.
+
 \noindent\rule{9cm}{0.3pt}
 
 Paolo Battellani \\
