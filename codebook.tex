@@ -168,6 +168,29 @@ solution is unique iff the rank of the matrix equals the number of variables.
 \subsection{Euler's Totient} % Andre Hahn Pereira
 \lstinputlisting[language=c++]{totient.cpp}
 
+\subsection{Combinatorics and Probability (Text)}
+\begin{itemize}
+\item Binomial Coefficient $\binom{n}{k} = \binom{n - 1}{k - 1} + \binom{n - 1}{k} = \frac{n!}{k!(n - k)!}$
+\item Number of permutations with $n_k$ indistinguishable elements of type $k$ $ = \frac{n!}{\prod_{k}n_k!}$
+\item Derangement: permutation of the elements of a set such that none of the elements appear in their original position. \\
+Number of derangements of $n$ elements \\
+$der(n) = \begin{cases}
+1 & \text{$n = 0$} \\
+0 & \text{$n = 1$} \\
+(n - 1) * (der(n - 1) + der(n - 2)) & \text{$n > 1$} \\
+\end{cases}$
+\item Catalan number $Cat(n) = \begin{cases}
+1 & \text{$n = 0$} \\
+\frac{1}{n + 1}\binom{2n}{n} & \text{$n > 0$}
+\end{cases}$ \\
+$Cat(n) = \binom{2n}{n} - \binom{2n}{n - 1}$ \\
+$Cat(n)$ counts the number of valid expressions containing $n$ pairs of parentheses,
+the number of monotonic paths along the edges of a $n \times n$ grid which do not pass above the diagonal
+and similar combinations.
+\item Expected number of trials until success with probability of success $p$ in every trial is $\frac{1}{p}$.
+\item Probability of exactly $k$ successes of probability $p$ out of $n$ trials is $\binom{n}{k}p^k(1 - p)^k$.
+\end{itemize}
+
 \section{Graphs}
 
 \subsection{Strongly connected components} % Stanford (modified by Brian Bi)
@@ -258,8 +281,8 @@ $\mu(n) = \begin{cases}
 0 & \text{$n$ not squarefree} \\
 1 & \text{$n$ squarefree w/ even no. of prime factors} \\
 -1 & \text{$n$ squarefree w/ odd no. of prime factors} \\
-\end{cases}$
-Note that $\mu(a) \mu(b) = \mu(ab)$ for $a, b$ relatively prime
+\end{cases}$ \\
+Note that $\mu(a) \mu(b) = \mu(ab)$ for $a, b$ relatively prime \\
 Also $\sum_{d \mid n} \mu(d) = \begin{cases} 1 & \text{if $n = 1$} \\
 0 & \text{otherwise} \end{cases}$
 
@@ -285,6 +308,21 @@ Reflections over diagonals split cells into $2n$ groups of 1 (the diagonal
 itself) and $2n^2-n$ groups of 2 (all remaining cells), thus yielding
 $X^{2n^2-n+2n}=X^{2n^2+n}$ unaffected colorings.  So, the answer is
 $(X^{4n^2}+3X^{2n^2}+2X^{n^2}+2X^{2n^2+n})/8$.
+
+\subsection{Euler's Totient Function Properties (Text)}
+\begin{itemize}
+\item $\displaystyle \sum_{d|n} \varphi(d) = n$ \\
+Apply M\"obius Inversion to obtain $\displaystyle \varphi(n) = \sum_{d|n} \mu(d)\frac{n}{d}$
+\item $\varphi(p^k) = p^k - p^{k-1}$ for all primes $p$ with $k \geq 1$
+\item $\varphi(ab) = \varphi(a)\varphi(b)\frac{d}{\varphi(d)}$ where $d = gcd(a, b)$ \\
+When $a$ and $b$ are coprimes this reduces to \\
+$\varphi(ab) = \varphi(a)\varphi(b)$
+\item $a^{\varphi(m)} \equiv 1 \ (mod \ m)$ \\
+When m is prime $a^{m-1} \equiv 1 \ (mod \ m)$ (Fermat's little theorem)
+\item $x^n \equiv x^{\varphi(m) + (n \ mod \ \varphi(m))} \ mod \ m$
+\item $a | b \implies \varphi(a) | \varphi(b)$
+\item $n | \varphi(a^n - 1)$ for $a, n > 1$
+\end{itemize}
 
 \section{Strings}
 
