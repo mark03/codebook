@@ -184,11 +184,9 @@ $der(n) = \begin{cases}
 \frac{1}{n + 1}\binom{2n}{n} & \text{$n > 0$}
 \end{cases}$ \\
 $Cat(n) = \binom{2n}{n} - \binom{2n}{n - 1}$ \\
-$Cat(n)$ counts the number of valid expressions containing $n$ pairs of parentheses,
-the number of monotonic paths along the edges of a $n \times n$ grid which do not pass above the diagonal
-and similar combinations.
+$Cat(n)$ satisfies $Cat(n + 1) = \sum_{i = 0}^{n} Cat(i)Cat(n - i)$.
 \item Expected number of trials until success with probability of success $p$ in every trial is $\frac{1}{p}$.
-\item Probability of exactly $k$ successes of probability $p$ out of $n$ trials is $\binom{n}{k}p^k(1 - p)^k$.
+\item Probability of exactly $k$ successes of probability $p$ out of $n$ trials is $\binom{n}{k}p^k(1 - p)^{n-k}$.
 \end{itemize}
 
 \section{Graphs}
@@ -200,6 +198,8 @@ and similar combinations.
 \lstinputlisting[language=c++]{bridges.cpp}
 
 \subsection{Eulerian path}
+% Tested against:
+% codeforces: 1152E
 \lstinputlisting[language=c++]{eulerian.cpp}
 
 \subsection{Eulerian Tour}
@@ -251,9 +251,6 @@ algorithm BronKerbosch(R, P, X) is
 \lstinputlisting[language=c++]{floyd-warshall.cpp}
 
 \section{Data Structures}
-
-\subsection{Suffix arrays} % Stanford
-\lstinputlisting[language=c++]{suffix-array.cpp}
 
 \subsection{Binary Indexed Tree (BIT) / Fenwick Tree} % Brian Bi
 \lstinputlisting[language=c++]{BIT.cpp}
@@ -332,10 +329,18 @@ When m is prime $a^{m-1} \equiv 1 \ (mod \ m)$ (Fermat's little theorem)
 \subsection{Z-Algorithm}
 \lstinputlisting[language=c++]{Z-algorithm.cpp}
 
+\subsection{Suffix array and lcp array}
+% Tested against:
+% olinfo: unimi_glith
+% hackerrank: morgan-and-a-string
+\lstinputlisting[language=c++]{suffix-array.cpp}
+
 \subsection{Longest palindromic substring} % Brian Bi
 \lstinputlisting[language=c++]{manacher.cpp}
 
 \subsection{Aho-Corasick}
+% Tested against:
+% swerc 2016: passwords
 \lstinputlisting[language=c++]{aho-corasick.cpp}
 
 \section{Miscellaneous}

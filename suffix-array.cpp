@@ -1,73 +1,69 @@
-// Suffix array construction in O(L log^2 L) time.  Routine
-// for computing the length of the longest common prefix of
-// any two suffixes in O(log L) time.
-//
-// INPUT:   string s
-//
-// OUTPUT:  array suffix[] such that suffix[i] = index (from
-// 0 to L-1)
-//          of substring s[i...L-1] in the list of sorted
-//          suffixes. That is, if we take the inverse of the
-//          permutation suffix[], we get the actual suffix
-//          array.
+// Suffix array implementation in O(nlogn).
+// Includes implementation of lcp array in O(n).
 struct SuffixArray {
-  const int L;
-  string s;
-  vector<vector<int>> P;
-  vector<pair<pair<int, int>, int>> M;
+  int n;
+  string T;
+  vector<int> SA, tempSA, RA, tempRA, L, lcp;
 
-  SuffixArray(const string &s)
-      : L(s.length()), s(s), P(1, vector<int>(L, 0)), M(L) {
-    for (int i = 0; i < L; i++)
-      P[0][i] = L == 1 ? i : int(s[i]);
-    for (int skip = 1, level = 1; skip < L;
-         skip *= 2, level++) {
-      P.push_back(vector<int>(L, 0));
-      for (int i = 0; i < L; i++)
-        M[i] = make_pair(make_pair(P[level - 1][i],
-                                   i + skip < L
-                                       ? P[level - 1][i + skip]
-                                       : -1000),
-                         i);
-      sort(M.begin(), M.end());
-      for (int i = 0; i < L; i++)
-        P[level][M[i].second] =
-            (i > 0 && M[i].first == M[i - 1].first)
-                ? P[level][M[i - 1].second]
-                : i;
-    }
+  SuffixArray(const string &s): n(s.size() + 1), T(s),
+      SA(n), tempSA(n), RA(n), tempRA(n), lcp(n) {
+    T.push_back('$'); // text must end with $
+  }
+  
+  inline int getRA(int i) {
+    return (i < n) ? RA[i] : 0;
   }
 
-  vector<int> GetSuffixArray() { return P.back(); }
+  void radix_sort(int k) {
+    int mx = max(n, 256);
+    L.assign(mx, 0);
+    for(int i = 0; i < n; ++i) L[getRA(i + k)]++;
+    for(int i = 0, s = 0; i < mx; ++i) {
+      int x = L[i];
+      L[i] = s;
+      s += x;
+    }
+    for(int i = 0; i < n; ++i) {
+      int& x = L[getRA(SA[i] + k)];
+      tempSA[x++] = SA[i];
+    }
+    for(int i = 0; i < n; ++i) SA[i] = tempSA[i];
+  }
 
-  // returns the length of the longest common prefix of
-  // s[i...L-1] and s[j...L-1]
-  int LongestCommonPrefix(int i, int j) {
-    int len = 0;
-    if (i == j)
-      return L - i;
-    for (int k = P.size() - 1; k >= 0 && i < L && j < L; k--) {
-      if (P[k][i] == P[k][j]) {
-        i += 1 << k;
-        j += 1 << k;
-        len += 1 << k;
+  // call this to build suffix array, it will be stored in SA
+  // first position in SA is always occupied by string "$"
+  void buildSA() {
+    for(int i = 0; i < n; ++i) {
+      SA[i] = i;
+      RA[i] = T[i];
+    }
+    for(int k = 1; k < n; k <<= 1) {
+      radix_sort(k);
+      radix_sort(0);
+      tempRA[SA[0]] = 0;
+      for(int i = 1, r = 0; i < n; ++i) {
+        if(getRA(SA[i - 1]) != getRA(SA[i])) r++;
+        else if(getRA(SA[i - 1] + k) != getRA(SA[i] + k)) r++;
+        tempRA[SA[i]] = r;
       }
+      for(int i = 0; i < n; ++i) RA[i] = tempRA[i];
+      if(RA[SA[n - 1]] == n - 1) break;
     }
-    return len;
   }
+
+  // call this to build lcp array, it will be stored in lcp
+  // make sure suffix array is already built
+  void buildLCP() { 
+    for(int i = 0, k = 0; i < n; ++i) { 
+      if(RA[i] == n - 1) { 
+        k = 0; 
+        continue; 
+      }
+
+      int j = SA[RA[i] + 1]; 
+      while(i + k < n && j + k < n && T[i + k] == T[j + k]) ++k; 
+      lcp[RA[i]] = k; 
+      if(k > 0) --k; 
+    }
+  }  
 };
-
-int main() {
-  // bobocel is the 0'th suffix
-  //  obocel is the 5'th suffix
-  //   bocel is the 1'st suffix
-  SuffixArray suffix("bobocel");
-  vector<int> v = suffix.GetSuffixArray();
-
-  // Expected output: 0 5 1 6 2 3 4
-  //                  2
-  for (int i = 0; i < v.size(); i++)
-    cout << v[i] << " ";
-  cout << endl;
-  cout << suffix.LongestCommonPrefix(0, 2) << endl;
-}
