@@ -2,8 +2,6 @@
 // Not properly tested
 // Edges is inserted twice in the result
 // if shared by two triangles
-// To obtain Voronoi diagram compute perpendicular
-// bisectors of the edges and their intersection
 
 using ld = long double;
 constexpr ld eps = 1e-4;

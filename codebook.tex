@@ -57,6 +57,9 @@
 % Frank Chu and Igor Naverniouk (modified by Brian Bi)
 \lstinputlisting[language=c++]{mcmf4.cpp}
 
+\subsection{Max flow (Edmonds-Karp)}
+\lstinputlisting[language=c++]{edmonds-karp.cpp}
+
 \subsection{Max flow (Dini\'c)} % Stanford
 \lstinputlisting[language=c++]{dinic.cpp}
 
@@ -116,6 +119,19 @@ incident upon it and add it to the edge set.
 \subsection{Fast Delaunay triangulation}
 \lstinputlisting[language=c++]{fast-delaunay.cpp}
 
+\subsection{Delaunay triangulation to Voronoi diagram (Text)}
+The Voronoi diagram is the dual graph of the Delaunay triangulation.
+To obtain Voronoi diagram compute the circumcenters of the Delaunay triangles:
+these are the Voronoi vertices. Voronoi edges are obtained connecting
+the circumcenters of triangles that share an edge (the Voronoi edge will be
+perpendicular to such edge). If a triangle edge is not shared with another triangle,
+then the respective Voronoi edge goes to infinity. \\
+\textit{Degenerate cases}: \\
+\textbf{All points are collinear}: Delaunay triangulation does not exist and Voronoi diagram
+is not connected. \\
+\textbf{Four or more points lie on the same circle}: Delaunay triangulation is not unique and
+the circumcenters are identical (Voronoi edges overlap).
+
 \subsection{Pick's Theorem (Text)} % Wesley May
 For a polygon with all vertices on lattice points, $A = i + b/2 - 1$, where $A$
 is the area, $i$ is the number of lattice points strictly within the polygon,
@@ -167,6 +183,9 @@ solution is unique iff the rank of the matrix equals the number of variables.
 
 \subsection{Euler's Totient} % Andre Hahn Pereira
 \lstinputlisting[language=c++]{totient.cpp}
+
+\subsection{Floyd's cycle-finding algorithm}
+\lstinputlisting[language=c++]{cycle-finding.cpp}
 
 \subsection{Combinatorics and Probability (Text)}
 \begin{itemize}
@@ -268,6 +287,13 @@ algorithm BronKerbosch(R, P, X) is
 % Tom Yubing Dong (tomtung) (modified by Brian Bi)
 \lstinputlisting[language=c++]{SBT.cpp}
 
+\subsection{Implicit Treap}
+% Tested against:
+% codeforces: 863D
+% codeforces: 1358E
+% olinfo: vasi (AC only with fast input)
+\lstinputlisting[language=c++]{treap.cpp}
+
 \section{Number Theory Reference}
 \subsection{Polynomial Coefficients (Text)} % Brian Bi
 $(x_1 + x_2 + ... + x_k)^n = \sum_{c_1 + c_2 + ... + c_k = n}
@@ -351,6 +377,12 @@ When m is prime $a^{m-1} \equiv 1 \ (mod \ m)$ (Fermat's little theorem)
 \subsection{Convex hull trick} % Brian Bi
 \lstinputlisting[language=c++]{chtrick.cpp}
 
+\subsection{Convex hull trick (online)}
+% Tested against:
+% codeforces: 932F
+% csacademy: building-bridges
+\lstinputlisting[language=c++]{cht-online.cpp}
+
 \subsection{Shunting Yard (Pseudocode)} % Wesley May
 \begin{lstlisting}
 // Add '(' to start of expression, and ')' to end.
@@ -388,8 +420,56 @@ for each token:
 \subsection{Union-Find}
 \lstinputlisting[language=c++]{union-find.cpp}
 
+\subsection{Centroid decomposition}
+\lstinputlisting[language=c++]{centroid.cpp}
+
 \subsection{NTT constants generator}
 \lstinputlisting[language=c++]{ntt-gen.cpp}
+
+\subsection{Game theory, Sprague-Grundy theorem (Text)}
+We consider games that are:
+\begin{itemize}
+\item impartial: available moves and winning/losing depend only on the state of the game;
+\item with perfect information: no information is hidden to players (they know rules and possible moves);
+\item finite: after a certain number of moves one of the players will end up in a losing position (state),
+i.e. a position from which no moves are available.
+\end{itemize}
+Such games can be described with a DAG, where nodes are states and edges are transitions (moves) between states. \\
+Sinks in this graph are losing states by definition. All other states are classified in the following way:
+\begin{itemize}
+\item a state is \textbf{winning} if there is at least a transition to a losing state;
+\item a state is \textbf{losing} otherwise, i.e. there are no transitions to another losing state.
+\end{itemize}
+\textbf{Nim} \\
+This game follows the restrictions described above. \\
+There are several piles, each with several stones. In a move a player can take any positive amount of stones
+from a pile and remove it (we can also consider the modification where stones can be added to a pile:
+as long as the game remains acyclic this modification doesn't change how winning and losing states
+are determined). A player loses when no moves are available, which happens when all piles are empty. \\
+A state is losing if the xor-sum of the number of stones in each pile is zero,
+otherwise is winning (can be proved by induction). \\
+All states with the same xor-sum $s$ are thus equivalent and can be replaced with one another.
+In particular such states can be replaced with the state represented by a single pile of size $s$. \\
+\textbf{Sprague-Grundy theorem} \\
+Let's consider a game that follows the restrictions described above. \\
+Then for each state $v$, we can assign an equivalent state of a game of Nim with xor-sum $x$
+(or simply with a pile of size $x$). This value $x$ is called the Grundy number of the state $v$. \\
+Let $v_i$ be the states reachable from the state $v$ and let $x_i$ be their respective Grundy number. \\
+Then $x$ can be calculated in the following recursive way: $x = mex(\{x_1, ..., x_k\})$,
+where the function $mex$ (minimum excludant) is the smallest non-negative integer not found in the given set. \\
+If a transition leads to a sum of indipendent games, the Grundy number of this state is computed as the
+xor-sum of the Grundy number of each indipendent game. \\
+Like in Nim, a state in this game if losing if its Grundy number is zero. \\
+\textit{Example}: Consider a checkered strip of size $1 \times n$. In one move the current player must put one cross in
+a cell, but it's forbidden to put two crosses in two adjacent cells. As usual, the player without a valid move loses.
+\begin{itemize}
+\item A cross is put in cell $1$ or $n$. This leads to a state of size $n - 2$,
+as the cell with the cross and the one next to it can't be used.
+\item A cross is put in cell $i$ with $1 < i < n$. This leads to a state with two indipendent games,
+of size $i - 2$ (the left part of the strip that can still be used) and $n - i - 1$ (the right part).
+\end{itemize}
+The Grundy number $g(n)$ can thus be calculated in the following way:
+$g(n) = mex(\{g(n - 2)\} \cup \{g(i - 2) \oplus g(n - i - 1) | 1 < i < n\})$.
 
 \subsection{DP optimizations (Text)}
 \begin{itemize}
